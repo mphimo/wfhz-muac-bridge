@@ -23,3 +23,6 @@ source("scripts/read-data.R")
 
 source("scripts/data-wrangling.R")
 
+## ---- Data Plausibility Check ------------------------------------------------
+
+source("scripts/plausibility-check.R")
