@@ -5,7 +5,7 @@
 
 ## ---- Fill all NA's in `survdate` with values from previous cell -------------
 
-surveys <- surveys |> 
+data <- surveys |> 
   fill(
     survdate, 
     .direction = "updown"
@@ -19,7 +19,7 @@ surveys <- surveys |>
 ## ---- Compute z-scores -------------------------------------------------------
 
 ### Weight-for-height ----
-data <- surveys |> 
+data <- data |> 
   mw_wrangle_wfhz(
     sex = sex,
     weight = weight,
@@ -40,6 +40,7 @@ data <- data |>
     age = age,
     .decimals = 3
   )
+
 
 ## ---- Define wasting ---------------------------------------------------------
 
@@ -78,10 +79,13 @@ data <- data |>
     mam_muac = mam
   )
 
+
 ## ---- Filter out outliers by both WFHZ and MFAZ ------------------------------
 
-data <- data |> 
-  filter(flag_wfhz != 1 | flag_mfaz != 1) |> 
-  select(surv_id, year, cluster, cgam, gam_wfhz, gam_muac)
+.data <- data |> 
+  mutate(
+    cflags = ifelse(flag_wfhz == 1 | flag_mfaz == 1, 1, 0)
+  ) |> 
+  filter(cflags != 1)
 
 # ============================  End of Workflow ================================
