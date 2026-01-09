@@ -15,6 +15,10 @@ library(lubridate)
 
 key <- data_key(".", Sys.getenv("path_secret_key"))
 
+## ---- Load project-specific functions ----------------------------------------
+
+for (i in list.files("R", full.names = TRUE)) source(i)
+
 ## ---- Read data --------------------------------------------------------------
 
 source("scripts/read-data.R")
