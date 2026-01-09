@@ -11,10 +11,17 @@ data <- surveys |>
     .direction = "updown"
   ) |> 
   mutate(
-    survdate = ymd(as.Date(survdate, format = "%d/%m/%Y")),
-    year = year(survdate)
+    survdate = ymd(as.Date(survdate, format = "%d/%m/%Y")), #date forwat is untidy; used year instead.
+    year = year(survdate), 
+    year = case_match(year,
+      c(2204, 2240, 2034, 2040, 2012, 2014) ~ 2024,
+      c(2030, 2203) ~ 2023,
+      c(2028, 2005, 2026) ~ 2025,
+      .default = year
+    ), 
+    year = ifelse(year == "2020" & surv_id == "13", 2023, year),
+    year = ifelse(year == "2020" & surv_id == "65", 2024, year)
   )
-  
 
 ## ---- Compute z-scores -------------------------------------------------------
 
