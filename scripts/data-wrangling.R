@@ -11,10 +11,14 @@ data <- surveys |>
     .direction = "updown"
   ) |> 
   mutate(
-    survdate = ymd(as.Date(survdate, format = "%d/%m/%Y")), #date forwat is untidy; used year instead.
+    survdate = case_when(
+      surv_id %in% c(149:153) ~ as.Date(survdate, format = "%d/%m/%Y"),
+      survdate == "15/-J/ul-25" ~ as.Date("2025-07-15"),
+      .default = as.Date(survdate, format = "%m/%d/%Y")
+    ),
     year = year(survdate), 
     year = case_match(year,
-      c(2204, 2240, 2034, 2040, 2012, 2014) ~ 2024,
+      c(2204, 2240, 2034, 2040, 2012, 2014, 3034) ~ 2024,
       c(2030, 2203) ~ 2023,
       c(2028, 2005, 2026) ~ 2025,
       .default = year
