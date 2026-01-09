@@ -33,7 +33,7 @@ pl_mfaz <- .data |>
 
 ## ---- Find faulty survey IDs as in `pl_mfaz` ---------------------------------
 
-flawless <- pl_mfaz |> 
+flawless_surv <- pl_mfaz |> 
   mutate(
     faulty = ifelse(
       `Class. of age ratio` == "Problematic" | `Class. of standard dev` == "Problematic", 
