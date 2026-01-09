@@ -1,32 +1,31 @@
 # ==============================================================================
-#                     FEATURE EXTRACTION IN FLAWLESS SURVEYS
+#                     FEATURE EXTRACTION IN FAULTY SURVEYS
 # ==============================================================================
 
 
 ## ---- Filter out faulty surveys from the dataset -----------------------------
 
-flawless_data <- .data |> 
-  filter(surv_id %in% flawless_surv) |> 
+faulty_data <- .data |> 
   select(surv_id, year, cluster, contains(c("flag", "am")))
 
 
 ## ---- Split feature extraction and testing sets ------------------------------
 
 ### Time-based split: take the first prop for feature extraction set ----
-split_flawless_FextrTest_time <- initial_time_split(flawless_data, prop = 0.80)
-Fextr_flawless_time <- training(split_flawless_FextrTest_time)
-Test_flawless_time <- testing(split_flawless_FextrTest_time)
+split_faulty_FextrTest_time <- initial_time_split(faulty_data, prop = 0.80)
+Fextr_faulty_time <- training(split_faulty_FextrTest_time)
+Test_faulty_time <- testing(split_faulty_FextrTest_time)
 
 ### Purely random-based split ----
-split_flawless_FextTest_random <- initial_split(flawless_data, prop = 0.80)
-Fextr_flawless_random <- training(split_flawless_FextTest_random)
-Test_flawless_random <- testing(split_flawless_FextTest_random)
+split_faulty_FextTest_random <- initial_split(faulty_data, prop = 0.80)
+Fextr_faulty_random <- training(split_faulty_FextTest_random)
+Test_faulty_random <- testing(split_faulty_FextTest_random)
 
 
 ## ---- Extract features -------------------------------------------------------
 
 ### In time-based feature extraction set ----
-features_flawless_time <- Fextr_flawless_time |> 
+features_faulty_time <- Fextr_faulty_time |> 
   estimate_burden_of_wasting(
     cgam = cgam,
     gam_wfhz = gam_wfhz,
@@ -41,7 +40,7 @@ features_flawless_time <- Fextr_flawless_time |>
   )
 
 ### in Random-based feature extraction set ----
-features_flawless_random <- Fextr_flawless_random |> 
+features_faulity_random <- Fextr_faulty_random |> 
   estimate_burden_of_wasting(
     cgam = cgam,
     gam_wfhz = gam_wfhz,
