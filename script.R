@@ -31,13 +31,23 @@ source("scripts/data-wrangling.R")
 
 source("scripts/plausibility-check.R")
 
+## ---- Split feature extraction and testing sets ------------------------------
+
+source("scripts/split-feature-extract-testing-sets.R")
+
 ## ---- Extract insights from the feature extraction set -----------------------
 
-source("scripts/feature-extraction-in-flawless-surveys.R")
-source("scripts/feature-extraction-in-faulty-surveys.R")
+source("scripts/extract-features-in-flawless-surveys-muac.R")
+source("scripts/extract-features-in-flawless-surveys-mfaz.R")
+source("scripts/extract-features-in-faulty-surveys-muac.R")
+source("scripts/extract-features-in-faulty-surveys-mfaz.R")
 
 ## ---- Model ------------------------------------------------------------------
 
-source("scripts/model-faulty-data.R")
-source("scripts/model-flawless-data.R")
+source("scripts/model-flawless-data-muac.R")
+source("scripts/model-flawless-data-mfaz.R")
+source("scripts/model-faulty-data-muac.R")
+source("scripts/model-faulty-data-mfaz.R")
 
+
+# ============================  End of Workflow ================================

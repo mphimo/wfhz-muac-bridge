@@ -53,10 +53,10 @@ data <- data |>
   )
 
 
-## ---- Define wasting ---------------------------------------------------------
+## ---- Define wasting: WFHZ vs MUAC -------------------------------------------
 
 ### Combined case definition ----
-data <- data |> 
+muac_data <- data |> 
     mutate(
     muac = recode_muac(muac, "mm")
   ) |> 
@@ -67,8 +67,9 @@ data <- data |>
     .by = "combined"
   )
 
-### Wasting case-definition by WFHZ ----
-  data <- data |> define_wasting(
+### Wasting case definition by WFHZ ----
+muac_data <- muac_data |> 
+  define_wasting(
     zscores = wfhz,
     .by = "zscores"
   ) |> 
@@ -78,8 +79,8 @@ data <- data |>
     mam_wfhz = mam
   )
 
-### Wasting case-definition by MUAC ----
-data <- data |> 
+### Wasting case definition by MUAC ----
+muac_data <- muac_data |> 
   define_wasting(
     muac = muac,
     .by = "muac"
@@ -90,11 +91,42 @@ data <- data |>
     mam_muac = mam
   )
 
+### Filter out outliers by both WFHZ and MFAZ ----
 
-## ---- Filter out outliers by both WFHZ and MFAZ ------------------------------
-
-.data <- data |> 
+muac_data <- muac_data |> 
   mutate(
+    cflags = ifelse(flag_wfhz == 1 | flag_mfaz == 1, 1, 0)
+  ) |> 
+  filter(cflags != 1)
+
+
+## ---- Define wasting: WFHZ vs MFAZ -------------------------------------------
+
+
+### Wasting case definition by MFAZ and combind ----
+mfaz_data <- data |> 
+  define_wasting(
+    zscores = mfaz,
+    .by = "zscores",
+    oedema = NULL
+  ) |> 
+  rename(
+    gam_mfaz = gam, 
+    sam_mfaz = sam,
+    mam_mfaz = mam
+  ) |> 
+  define_wasting(
+    zscores = wfhz,
+    .by = "zscores",
+    oedema = NULL,
+  ) |> 
+  rename(
+    gam_wfhz = gam,
+    sam_wfhz = sam,
+    mam_wfhz = mam
+  ) |> 
+  mutate(
+    cgam = ifelse(wfhz < -2 | mfaz < -2, 1, 0), 
     cflags = ifelse(flag_wfhz == 1 | flag_mfaz == 1, 1, 0)
   ) |> 
   filter(cflags != 1)

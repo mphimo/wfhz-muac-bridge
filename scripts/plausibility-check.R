@@ -5,7 +5,7 @@
 
 ## ---- Plausibility Check WFHZ ------------------------------------------------
 
-pl_wfhz <- .data |> 
+pl_wfhz <- muac_data |> 
   mw_plausibility_check_wfhz(
     sex = sex,
     age = age, 
@@ -19,7 +19,7 @@ pl_wfhz <- .data |>
 
 ## ---- Plausibility Check MFAZ ------------------------------------------------
 
-pl_mfaz <- .data |> 
+pl_mfaz <- muac_data |> 
   mutate(muac = recode_muac(muac, "cm")) |> 
   mw_plausibility_check_mfaz(
     sex = sex,
