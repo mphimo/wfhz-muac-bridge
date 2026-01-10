@@ -35,3 +35,9 @@ source("scripts/plausibility-check.R")
 
 source("scripts/feature-extraction-in-flawless-surveys.R")
 source("scripts/feature-extraction-in-faulty-surveys.R")
+
+## ---- Model ------------------------------------------------------------------
+
+source("scripts/model-faulty-data.R")
+source("scripts/model-flawless-data.R")
+
