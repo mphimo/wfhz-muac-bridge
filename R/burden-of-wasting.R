@@ -38,3 +38,47 @@ estimate_burden_of_wasting <- function(.data, cgam, gam_wfhz, gam_muac, .by) {
 
   df
 }
+
+
+#'
+#' @title
+#' Predict the prevalence of wasting derived from weight-for-height z-score or
+#' mid-upper arm cincunference on the basis on known feature insights from 
+#' historical data
+#' 
+#' @description
+#' The function estimates what would be the prevalence of wasting derived from
+#' either weight-for-height z-scores (WFHZ) or mid-upper arm circunference when either 
+#' is unavailable. The prediction happens thanks to insights on the median 
+#' proportion of cases of wasting that each methods identifies over the overall
+#' burden based on combined definition of wasting, learned extracted from histor-
+#' ical datasets.
+#' 
+#' @param prev The observed prevalence of wasting.
+#' @param known_prop_wfhz The known median proportion of cases of wasting 
+#' identified by WFHZ from historical survey dataset.
+#' @param known_prop_muac The known median proportion of cases of wasting ident-
+#' ified by MUAC from historical survey dataset.
+#' @param .for The method for which the prediction should be. Defaults to WFHZ
+#' 
+#' 
+#' @returns A value for the predicted prevalence of wasting for the method 
+#' chosen in the `.for` argument.
+
+predict_prevalence <- function(
+  obs_prev, 
+  known_prop_wfhz, 
+  known_prop_muac, 
+  .for = c("wfhz", "muac")
+) {
+
+  ## Enforce options in `.for` ----
+  .for <- match.arg(.for)
+
+ if (.for == "wfhz") {
+    (obs_prev * known_prop_wfhz) / known_prop_muac
+  } else {
+    (obs_prev * known_prop_muac) / known_prop_wfhz
+  }
+
+}
