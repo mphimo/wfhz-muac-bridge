@@ -5,7 +5,7 @@
 
 ## ---- Plausibility Check WFHZ ------------------------------------------------
 
-pl_wfhz <- .data |> 
+pl_wfhz <- muac_wfhz_data |> 
   mw_plausibility_check_wfhz(
     sex = sex,
     age = age, 
@@ -19,7 +19,7 @@ pl_wfhz <- .data |>
 
 ## ---- Plausibility Check MFAZ ------------------------------------------------
 
-pl_mfaz <- .data |> 
+pl_mfaz <- muac_wfhz_data |> 
   mutate(muac = recode_muac(muac, "cm")) |> 
   mw_plausibility_check_mfaz(
     sex = sex,
@@ -42,3 +42,6 @@ flawless_surv <- pl_mfaz |>
   ) |> 
   filter(faulty == "no") |> 
   pull(Surv_id)
+
+
+# ============================  End of Workflow ================================
