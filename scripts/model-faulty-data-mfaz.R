@@ -23,11 +23,20 @@ mfaz_wfhz_pred_flt_time <- mfaz_wfhz_flt_test_time |>
       .for = "muac"
     ),
     pred_wfhz_ratio = prev_mfaz * mfaz_wfhz_feat_flt_ratio_time$median_wfhz_mfaz,
-    bias_wfhz = pred_wfhz - prev_wfhz,
-    bias_wfhz_ratio = pred_wfhz_ratio - prev_wfhz,
-    bias_mfaz = pred_mfaz - prev_mfaz,
+    abs_error = get_absolute_percent_error(prev_wfhz, pred_wfhz),
+    abs_ratio = get_absolute_percent_error(prev_wfhz, pred_wfhz_ratio),
     .by = surv_id
   )
+
+### Estimate model accuracy: MAE and MAPE ----
+
+  mfaz_wfhz_flt_time_model_accuracy <- mfaz_wfhz_pred_flt_time |> 
+    summarise(
+      mae = mae(actual = prev_wfhz, predicted = pred_wfhz),
+      ratio_mae = mae(actual = prev_wfhz, predicted = pred_wfhz_ratio),
+      mape = mape(actual = prev_wfhz, predicted = pred_wfhz) * 100,
+      ratio_mape = mape(actual = prev_wfhz, predicted = pred_wfhz_ratio) * 100,
+    )
 
 ### Random-based split ----
 mfaz_wfhz_pred_flt_rdm <- mfaz_wfhz_flt_test_rdm |> 
@@ -48,11 +57,32 @@ mfaz_wfhz_pred_flt_rdm <- mfaz_wfhz_flt_test_rdm |>
       .for = "muac"
     ),
     pred_wfhz_ratio = prev_mfaz * mfaz_wfhz_feat_flt_ratio_rdm$median_wfhz_mfaz,
-    bias_wfhz = pred_wfhz - prev_wfhz,
-    bias_wfhz_ratio = pred_wfhz_ratio - prev_wfhz,
-    bias_mfaz = pred_mfaz - prev_mfaz,
+    abs_error = get_absolute_percent_error(prev_wfhz, pred_wfhz),
+    abs_ratio = get_absolute_percent_error(prev_wfhz, pred_wfhz_ratio),
     .by = surv_id
   )
 
+### Estimate model accuracy: MAE and MAPE ----
+
+  mfaz_wfhz_flt_rdm_model_accuracy <- mfaz_wfhz_pred_flt_rdm |> 
+    summarise(
+      mae = mae(actual = prev_wfhz, predicted = pred_wfhz),
+      ratio_mae = mae(actual = prev_wfhz, predicted = pred_wfhz_ratio),
+      mape = mape(actual = prev_wfhz, predicted = pred_wfhz) * 100,
+      ratio_mape = mape(actual = prev_wfhz, predicted = pred_wfhz_ratio) * 100,
+    )
+
+### Bind 
+stacked_accuracy <- bind_rows(
+  "muac_wfhz_fl_time"  = muac_wfhz_fl_time_model_accuracy,
+  "muac_wfhz_fl_rdm"   = muac_wfhz_fl_rdm_model_accuracy,
+  "mfaz_wfhz_fl_time"  = mfaz_wfhz_fl_time_model_accuracy,
+  "mfaz_wfhz_fl_rdm"   = mfaz_wfhz_fl_rdm_model_accuracy,
+  "muac_wfhz_flt_time" = muac_wfhz_flt_time_model_accuracy,
+  "muac_wfhz_flt_rdm"  = muac_wfhz_flt_rdm_model_accuracy,
+  "mfaz_wfhz_flt_time" = mfaz_wfhz_flt_time_model_accuracy,
+  "mfaz_wfhz_flt_rdm"  = mfaz_wfhz_flt_rdm_model_accuracy,
+  .id = "model"
+)
 
 # ============================  End of Workflow ================================

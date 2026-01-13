@@ -10,6 +10,7 @@ library(tidyr)
 library(mwana)
 library(rsample)
 library(lubridate)
+library(Metrics)
 
 ## ---- Retrieve secret key ----------------------------------------------------
 

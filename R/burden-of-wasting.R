@@ -82,3 +82,9 @@ predict_prevalence <- function(
   }
 
 }
+
+
+get_absolute_percent_error <- function(actual, predicted) {
+  x <- abs((actual - predicted) / actual) * 100
+  x
+}
