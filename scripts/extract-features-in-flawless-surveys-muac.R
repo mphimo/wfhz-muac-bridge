@@ -7,7 +7,7 @@
 
 
 ### Median based on the proportion of wasting ----
-muac_feat_fl_time <- muac_fl_ex_time |> 
+muac_wfhz_feat_fl_time <- muac_wfhz_fl_ex_time |> 
   estimate_burden_of_wasting(
     cgam = cgam,
     gam_wfhz = gam_wfhz,
@@ -22,7 +22,7 @@ muac_feat_fl_time <- muac_fl_ex_time |>
   )
 
 ### Median based on the ratio between wasting WFHZ and MUAC ----
-muac_feat_fl_ratio_time <- muac_fl_ex_time |> 
+muac_wfhz_feat_fl_ratio_time <- muac_wfhz_fl_ex_time |> 
   summarise(
     prev_wfhz = mean(gam_wfhz, na.rm = TRUE),
     prev_muac = mean(gam_muac, na.rm = TRUE),
@@ -36,7 +36,7 @@ muac_feat_fl_ratio_time <- muac_fl_ex_time |>
 
 
 ### Median based on the proportion of wasting ----
-muac_feat_fl_rdm <- muac_fl_ex_rdm |> 
+muac_wfhz_feat_fl_rdm <- muac_wfhz_fl_ex_rdm |> 
   estimate_burden_of_wasting(
     cgam = cgam,
     gam_wfhz = gam_wfhz,
@@ -51,7 +51,7 @@ muac_feat_fl_rdm <- muac_fl_ex_rdm |>
   )
 
 ### Median based on the ratio between wasting WFHZ and MUAC ----
-muac_feat_fl_ratio_rdm <- muac_fl_ex_rdm |> 
+muac_wfhz_feat_fl_ratio_rdm <- muac_wfhz_fl_ex_rdm |> 
   summarise(
     prev_wfhz = mean(gam_wfhz, na.rm = TRUE),
     prev_muac = mean(gam_muac, na.rm = TRUE),

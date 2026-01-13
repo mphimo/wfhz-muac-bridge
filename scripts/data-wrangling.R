@@ -3,7 +3,7 @@
 # ==============================================================================
 
 
-## ---- Fill all NA's in `survdate` with values from previous cell -------------
+## ---- Fill all NA's in `survdate` with values from previous cells -------------
 
 data <- surveys |> 
   fill(
@@ -56,7 +56,7 @@ data <- data |>
 ## ---- Define wasting: WFHZ vs MUAC -------------------------------------------
 
 ### Combined case definition ----
-muac_data <- data |> 
+muac_wfhz_data <- data |> 
     mutate(
     muac = recode_muac(muac, "mm")
   ) |> 
@@ -68,7 +68,7 @@ muac_data <- data |>
   )
 
 ### Wasting case definition by WFHZ ----
-muac_data <- muac_data |> 
+muac_wfhz_data <- muac_wfhz_data |> 
   define_wasting(
     zscores = wfhz,
     .by = "zscores"
@@ -80,7 +80,7 @@ muac_data <- muac_data |>
   )
 
 ### Wasting case definition by MUAC ----
-muac_data <- muac_data |> 
+muac_wfhz_data <- muac_wfhz_data |> 
   define_wasting(
     muac = muac,
     .by = "muac"
@@ -93,7 +93,7 @@ muac_data <- muac_data |>
 
 ### Filter out outliers by both WFHZ and MFAZ ----
 
-muac_data <- muac_data |> 
+muac_wfhz_data <- muac_wfhz_data |> 
   mutate(
     cflags = ifelse(flag_wfhz == 1 | flag_mfaz == 1, 1, 0)
   ) |> 
@@ -104,7 +104,7 @@ muac_data <- muac_data |>
 
 
 ### Wasting case definition by MFAZ and combind ----
-mfaz_data <- data |> 
+mfaz_wfhz_data <- data |> 
   define_wasting(
     zscores = mfaz,
     .by = "zscores",
@@ -130,5 +130,6 @@ mfaz_data <- data |>
     cflags = ifelse(flag_wfhz == 1 | flag_mfaz == 1, 1, 0)
   ) |> 
   filter(cflags != 1)
+
 
 # ============================  End of Workflow ================================
