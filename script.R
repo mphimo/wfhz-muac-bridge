@@ -11,6 +11,8 @@ library(mwana)
 library(rsample)
 library(lubridate)
 library(Metrics)
+library(gt)
+library(ggplot2)
 
 ## ---- Retrieve secret key ----------------------------------------------------
 
@@ -49,6 +51,7 @@ source("scripts/model-flawless-data-muac.R")
 source("scripts/model-flawless-data-mfaz.R")
 source("scripts/model-faulty-data-muac.R")
 source("scripts/model-faulty-data-mfaz.R")
+source("scripts/final-outputs.R")
 
 
 # ============================  End of Workflow ================================

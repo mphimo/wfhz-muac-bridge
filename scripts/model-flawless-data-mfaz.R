@@ -25,6 +25,8 @@ mfaz_wfhz_pred_fl_time <- mfaz_wfhz_fl_test_time |>
     pred_wfhz_ratio = prev_mfaz * mfaz_wfhz_feat_fl_ratio_time$median_wfhz_mfaz,
     abs_error = get_absolute_percent_error(prev_wfhz, pred_wfhz),
     abs_ratio = get_absolute_percent_error(prev_wfhz, pred_wfhz_ratio),
+    raw_error = pred_wfhz - prev_wfhz,
+    raw_error_ratio = pred_wfhz_ratio - prev_wfhz,
     .by = surv_id
   )
 
@@ -58,6 +60,8 @@ mfaz_wfhz_pred_fl_rdm <- mfaz_wfhz_fl_test_rdm |>
     pred_wfhz_ratio = prev_mfaz * mfaz_wfhz_feat_fl_ratio_rdm$median_wfhz_mfaz,
     abs_error = get_absolute_percent_error(prev_wfhz, pred_wfhz),
     abs_ratio = get_absolute_percent_error(prev_wfhz, pred_wfhz_ratio),
+    raw_error = pred_wfhz - prev_wfhz,
+    raw_error_ratio = pred_wfhz_ratio - prev_wfhz,
     .by = surv_id
   )
 

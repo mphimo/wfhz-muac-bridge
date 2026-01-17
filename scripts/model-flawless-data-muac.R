@@ -25,6 +25,8 @@ muac_wfhz_pred_fl_time <- muac_wfhz_fl_test_time |>
     pred_wfhz_ratio = prev_muac * muac_wfhz_feat_fl_ratio_time$median_wfhz_muac,
     abs_error = get_absolute_percent_error(prev_wfhz, pred_wfhz),
     abs_ratio = get_absolute_percent_error(prev_wfhz, pred_wfhz_ratio),
+    raw_error = pred_wfhz - prev_wfhz,
+    raw_error_ratio = pred_wfhz_ratio - prev_wfhz,
     .by = surv_id
   )
 
@@ -58,11 +60,13 @@ muac_wfhz_pred_fl_rdm <- muac_wfhz_fl_test_rdm |>
     pred_wfhz_ratio = prev_muac * muac_wfhz_feat_fl_ratio_rdm$median_wfhz_muac,
     abs_error = get_absolute_percent_error(prev_wfhz, pred_wfhz),
     abs_ratio = get_absolute_percent_error(prev_wfhz, pred_wfhz_ratio),
+    raw_error = pred_wfhz - prev_wfhz,
+    raw_error_ratio = pred_wfhz_ratio - prev_wfhz,
     .by = surv_id
   )
 
 ### Estimate model accuracy: MAE and MAPE ----
-  muac_wfhz_fl_rdm_model_accuracy <- mfaz_wfhz_pred_fl_rdm |> 
+  muac_wfhz_fl_rdm_model_accuracy <- muac_wfhz_pred_fl_rdm |> 
     summarise(
       mae = mae(actual = prev_wfhz, predicted = pred_wfhz),
       ratio_mae = mae(actual = prev_wfhz, predicted = pred_wfhz_ratio),

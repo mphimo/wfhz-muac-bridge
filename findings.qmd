@@ -1,0 +1,121 @@
+---
+title: "An Attemp to Predict the Prevalence of Wasting by WHZ grounded on insights from historical data"
+subtitle: "A case study using five years of Somalia nutrition surveys"
+format: revealjs
+---
+
+```{r}
+#| label: source-script
+#| include: false
+Sys.setenv(path_secret_key = "~/.ssh/id_rsa")
+source("script.R")
+```
+
+##
+### Analysis workflow {.smaller}  
+<br> 
+<br>
+<br>
+
+```{mermaid}
+%%| label: analysis-workflow
+flowchart LR
+  subgraph DW["Data Wrangling"]
+    zscores[Compute Z-scores]
+    zscores --> WHZ --> Define[/Define wasting/] --> Exclude([Exclude outliers in WHZ MFAZ])
+    zscores --> MFAZ --> Define --> Exclude
+
+  end
+
+  subgraph PC["Plausibility Check"]
+    Plausible[Plausibility Check]
+    Plausible --> wfhz[WHZ] --> FLFLT([Flawless or Faulty])
+    Plausible --> mfaz[MFAZ] --> FLFLT
+  end
+
+  subgraph SFET["Split FE and Testing sets"]
+    FLW[Flawless] --> FLW_TS_RDM[/Time & Random based/]
+    FLW_TS_RDM --> FLWFE[/F.Extraction: 80%/] --> FLW_TSFE_set([31,066])
+    FLW_TS_RDM --> FLWT[/Testing: 20%/] --> FLW_TST_set([7,767])
+    FLT[Faulty] --> FLT_TS_RDM[/Time & Random based/]
+    FLT_TS_RDM --> FLTFE[/F.Extraction: 80%/] --> FLT_TSFE_set([74,075])
+    FLT_TS_RDM --> FLTT[/Testing: 20%/] --> FLT_TST_set([18,519])
+  end
+
+  subgraph FEX["Feature Extraction"]
+    burden[Total wasting]
+    burden --> WHZMUAC[WHZ or MUAC]
+    burden --> WHZMFAZ[WHZ or MFAZ]
+    RAT[Prevalence Ratio]
+    WHZMUAC --> prop1[/%WHZ/] --> Med([Median])
+    WHZMUAC --> prop2[/%MUAC/] --> Med
+    WHZMFAZ --> prop1
+    WHZMFAZ --> prop3[/%MFAZ/] --> Med
+    RAT --> ratio1[/WHZ:MUAC/] --> Med
+    RAT --> ratio2[/WHZ:MFAZ/] --> Med
+  end
+
+  subgraph MOD["Model"]
+    model[Predict and Test Accuract]
+    model --> metric1[Mean Absolute Error]
+    model --> metric2[Mean Percent Absolute Error]
+  end
+
+DW --> PC --> SFET --> FEX --> MOD
+```
+
+##
+### Prediction accuracy {.smaller} 
+
+```{r}
+#| label: errors
+stacked_accuracy |> 
+  mutate(
+  across(2:5, ~ round(.x, 1))
+  ) |> 
+  gt() |> 
+  tab_header(
+    title = md("__Prediction Accuracy__"),
+    subtitle = md("__Error__ = _| Observed - Predicted |_")
+  ) |> 
+  cols_label(
+  model = md("__Model__"),
+  mae = html("<b>MAE</b> <br> Proportion-based <br> %"),
+  ratio_mae = html("<b>MAE</b> <br> Prevalence ratio <br> %"),
+  mape = md("<b>MAPE</b> <br> Proportion-based <br> %"),
+  ratio_mape = html("<b>MAPE</b> <br> Prevalence ratio <br> %")
+    ) |> 
+      tab_footnote(
+        footnote = md("__Mean Absolute Error__ of proportion-based model"),
+        location = cells_column_labels(columns = mae),
+        placement = "auto"
+      ) |> 
+      tab_footnote(
+        footnote = md("__Mean Absolute Error__ of prevalence-ratio-based model"),
+        location = cells_column_labels(columns = ratio_mae),
+        placement = "auto"
+      ) |> 
+      tab_footnote(
+        footnote = md("__Mean Absolute Percent Error__ of proportion-based model"),
+        location = cells_column_labels(columns = mape),
+        placement = "auto"
+      ) |> 
+      cols_align(
+        align = "center",
+        columns = !model
+      )
+```
+
+##
+### Conclusion {.smaller}
+
+<br> 
+
++ MFAZ showed to be the best-performing indicator to predict the prevalence of 
+wasting by WHZ with relatively smaller errors than raw MUAC values.
+
+::: {.callout-caution}
+Nonetheless, the level of uncertainty remains high, with an average five percent under- or over-estimation.
+:::
+
++ Proportion- or prevalence-ratio-based prediction approach leads to same results. One could use either approach. 
