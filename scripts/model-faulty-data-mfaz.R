@@ -25,6 +25,8 @@ mfaz_wfhz_pred_flt_time <- mfaz_wfhz_flt_test_time |>
     pred_wfhz_ratio = prev_mfaz * mfaz_wfhz_feat_flt_ratio_time$median_wfhz_mfaz,
     abs_error = get_absolute_percent_error(prev_wfhz, pred_wfhz),
     abs_ratio = get_absolute_percent_error(prev_wfhz, pred_wfhz_ratio),
+    raw_error = pred_wfhz - prev_wfhz,
+    raw_error_ratio = pred_wfhz_ratio - prev_wfhz,
     .by = surv_id
   )
 
@@ -59,6 +61,8 @@ mfaz_wfhz_pred_flt_rdm <- mfaz_wfhz_flt_test_rdm |>
     pred_wfhz_ratio = prev_mfaz * mfaz_wfhz_feat_flt_ratio_rdm$median_wfhz_mfaz,
     abs_error = get_absolute_percent_error(prev_wfhz, pred_wfhz),
     abs_ratio = get_absolute_percent_error(prev_wfhz, pred_wfhz_ratio),
+    raw_error = pred_wfhz - prev_wfhz,
+    raw_error_ratio = pred_wfhz_ratio - prev_wfhz,
     .by = surv_id
   )
 
@@ -71,18 +75,5 @@ mfaz_wfhz_pred_flt_rdm <- mfaz_wfhz_flt_test_rdm |>
       mape = mape(actual = prev_wfhz, predicted = pred_wfhz) * 100,
       ratio_mape = mape(actual = prev_wfhz, predicted = pred_wfhz_ratio) * 100,
     )
-
-### Bind 
-stacked_accuracy <- bind_rows(
-  "muac_wfhz_fl_time"  = muac_wfhz_fl_time_model_accuracy,
-  "muac_wfhz_fl_rdm"   = muac_wfhz_fl_rdm_model_accuracy,
-  "mfaz_wfhz_fl_time"  = mfaz_wfhz_fl_time_model_accuracy,
-  "mfaz_wfhz_fl_rdm"   = mfaz_wfhz_fl_rdm_model_accuracy,
-  "muac_wfhz_flt_time" = muac_wfhz_flt_time_model_accuracy,
-  "muac_wfhz_flt_rdm"  = muac_wfhz_flt_rdm_model_accuracy,
-  "mfaz_wfhz_flt_time" = mfaz_wfhz_flt_time_model_accuracy,
-  "mfaz_wfhz_flt_rdm"  = mfaz_wfhz_flt_rdm_model_accuracy,
-  .id = "model"
-)
 
 # ============================  End of Workflow ================================

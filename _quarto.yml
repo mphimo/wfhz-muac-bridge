@@ -1,0 +1,30 @@
+project: 
+  type: default
+  output-dir: reports
+
+format: 
+  revealjs:
+     theme: default
+     embed-resources: true
+     fig-dpi: 300
+     dev: svg
+     width: 1280
+     height: 720
+     slide-number: true
+     preview-links: true
+     scale: 1.5
+     math: mathjax
+     css: styles-revealjs.css
+     execute:
+       eval: true
+       echo: false
+       warning: false
+       message: false
+     fig-width: 8
+     fig-align: center
+     progress: true
+     transition: fade
+     fig-responsive: true
+
+date: today
+date-format: "DD MMMM YYYY"
